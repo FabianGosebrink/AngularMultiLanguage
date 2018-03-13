@@ -1,0 +1,24 @@
+<div>
+    <ul>
+        <li>
+            <a [routerLink]="['/', language]">Home</a>
+        </li>
+        <li>
+            <a [routerLink]="['/', language, 'news']">News</a>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a (click)="changeLanguage('de')">DE</a>
+        </li>
+        <li>
+            <a (click)="changeLanguage('en')">EN</a>
+        </li>
+        <li>
+            <a (click)="changeLanguage('fr')">FR</a>
+        </li>
+    </ul>
+</div>
+<div>
+    <router-outlet></router-outlet>
+</div>
