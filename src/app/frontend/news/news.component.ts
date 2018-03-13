@@ -1,31 +1,45 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
+import { LanguageService } from '../../shared';
+import { Observable } from 'rxjs/Observable';
 import {
-    LanguageService,
-} from '../../shared';
+    ActivatedRoute,
+    Params,
+    Router,
+    ActivationStart,
+    NavigationEnd
+} from '@angular/router';
+import {
+    map,
+    filter,
+    switchMap,
+    distinctUntilChanged,
+    take
+} from 'rxjs/operators';
 
 @Component({
     selector: 'app-news',
     templateUrl: './news.component.html',
-    styleUrls: ['./news.component.scss'],
+    styleUrls: ['./news.component.scss']
 })
-export class NewsComponent implements OnInit, OnDestroy {
-    public language: string;
+export class NewsComponent implements OnInit {
+    public language: Observable<string>;
+
     private subscription: Subscription;
 
-    constructor(private languageService: LanguageService) { }
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private router: Router
+    ) {}
 
     ngOnInit() {
-        console.log('news ngOnInit');
-        this.subscription = this.languageService.getLang().subscribe(lang => {
-            this.language = lang;
-            console.log(this.language);
-        });
-    }
-
-    ngOnDestroy() {
-        console.log('news ngOnDestroy');
-        // this.subscription.unsubscribe();
+        this.language = this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd),
+            map(() => this.activatedRoute.parent.parent),
+            distinctUntilChanged(),
+            switchMap(a => a.paramMap),
+            map(params => params.get('language'))
+        );
     }
 }

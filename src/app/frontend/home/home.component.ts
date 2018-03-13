@@ -1,33 +1,26 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import {
-    LanguageService
-} from '../../shared';
+import { LanguageService } from '../../shared';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
-    public language: string;
+export class HomeComponent implements OnInit {
+    public language: Observable<string>;
 
     private subscription: Subscription;
 
-    constructor(private languageService: LanguageService) { }
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        console.log('home ngOnInit');
-        this.subscription = this.languageService.getLang().subscribe(lang => {
-            console.log(lang);
-            this.language = lang;
-            console.log(this.language);
-        });
-    }
-
-    ngOnDestroy() {
-        console.log('home ngOnDestroy');
-        // this.subscription.unsubscribe();
+        this.language = this.activatedRoute.parent.paramMap.pipe(
+            map((params: Params) => params.get('language'))
+        );
     }
 }

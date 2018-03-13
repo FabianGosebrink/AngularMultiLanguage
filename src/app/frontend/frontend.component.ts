@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap, Params } from '@angular/router';
 
-import {
-    LanguageService,
-} from '../shared';
+import { LanguageService } from '../shared';
 
 @Component({
     selector: 'app-frontend',
@@ -12,7 +10,11 @@ import {
 })
 export class FrontendComponent implements OnInit {
     public language: string;
-    constructor(private router: Router, private activatedRoute: ActivatedRoute, private languageService: LanguageService) { }
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private languageService: LanguageService
+    ) {}
 
     ngOnInit() {
         this.activatedRoute.params.subscribe((params: Params) => {
