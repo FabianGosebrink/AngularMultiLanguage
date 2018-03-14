@@ -34,12 +34,16 @@ export class NewsComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.language = this.router.events.pipe(
-            filter(event => event instanceof NavigationEnd),
-            map(() => this.activatedRoute.parent.parent),
-            distinctUntilChanged(),
-            switchMap(a => a.paramMap),
-            map(params => params.get('language'))
+        // this.language = this.router.events.pipe(
+        //     filter(event => event instanceof NavigationEnd),
+        //     map(() => this.activatedRoute.parent.parent),
+        //     distinctUntilChanged(),
+        //     switchMap(a => a.paramMap),
+        //     map(params => params.get('language'))
+        // );
+
+        this.language = this.activatedRoute.parent.parent.paramMap.pipe(
+            map((params: Params) => params.get('language'))
         );
     }
 }
